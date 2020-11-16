@@ -1,8 +1,10 @@
 const functions = require('firebase-functions');
 const express = require('express');
 
-const firebaseAdmin = require('firebase-admin');
-firebaseAdmin.initializeApp();
+const crypto = require('crypto');
+
+const firebase = require('firebase-admin');
+firebase.initializeApp();
 
 const app = express();
 
@@ -14,8 +16,50 @@ exports.helloWorld = functions.https.onRequest((request, response) => {
   response.send("Hello from Firebase!");
 });
 
-app.get('/', async (req, res) => {
-    const snapshot = await firebaseAdmin.firestore().collection('courses').get();
+/* ******************************************************************************************** */
+/* ---------------------------------------- API Routes ---------------------------------------- */
+/* ******************************************************************************************** */
+
+/* ---------------------------------------- Login ---------------------------------------- */
+
+app.post('/create-user', async (req, res) => {
+    const {username, password} = req.body;
+
+    // check that user doesn't already exist
+    const usersRef = firebase.firestore().collection('users');
+    const dbResponse = await usersRef.where('username', '==', username).get();
+
+    if (dbResponse.empty) {
+        console.log('username not already in db, creating user');
+        const newUserId = crypto.randomBytes(20).toString('hex'); // userId is calculated once 
+        const hashedPassword = password; // TODO: hash this somehow
+
+        await usersRef.doc(newUserId).set({
+            'username': username,
+            'password': hashedPassword,
+            'courses': []
+        });
+
+        res.status(201).send();
+        
+    } else {
+        console.log('username already exists in db');
+        res.status(403).send();
+    }
+    // if (!doc.exists) {
+    //     console.log("username doesn't already exist, adding to db");
+    //     const newUserId = crypto.randomBytes(20).toString(credentials.userename);
+
+    // } else {
+    //     console.log("username already exists in db");
+
+    // }
+});
+
+
+/* ---------------------------------------- Courses ---------------------------------------- */
+app.get('/courses', async (req, res) => {
+    const snapshot = await firebase.firestore().collection('courses').get();
 
     let courses = [];
     snapshot.forEach(doc => {
@@ -25,12 +69,12 @@ app.get('/', async (req, res) => {
     res.status(200).send(JSON.stringify(courses));
 });
 
-app.post('/', async (req, res) => {
+app.post('/courses', async (req, res) => {
     const course = req.body;
 
-    await firebaseAdmin.firestore().collection('courses').doc(course.code).set(course);
+    await firebase.firestore().collection('courses').doc(course.code).set(course);
 
     res.status(200).send();
 });
 
-exports.courses = functions.https.onRequest(app)
+exports.api = functions.https.onRequest(app);

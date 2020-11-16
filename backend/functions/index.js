@@ -27,15 +27,19 @@ app.post('/create-user', async (req, res) => {
 
     // check that user doesn't already exist
     const usersRef = firebase.firestore().collection('users');
-    const dbResponse = await usersRef.where('username', '==', username).get();
+    const doc = await usersRef.doc(username).get();
+    // const dbResponse = await usersRef.where('username', '==', username).get();
 
-    if (dbResponse.empty) {
+    if (!doc.exists) {
         console.log('username not already in db, creating user');
-        const newUserId = crypto.randomBytes(20).toString('hex'); // userId is calculated once 
-        const hashedPassword = password; // TODO: hash this somehow
 
-        await usersRef.doc(newUserId).set({
-            'username': username,
+        // TODO: this needs to be guaranteed different
+        const newUserId = crypto.randomBytes(20).toString('hex'); // userId is calculated once 
+        // TODO: hash this somehow
+        const hashedPassword = password; 
+
+        await usersRef.doc(username).set({
+            'userId': newUserId,
             'password': hashedPassword,
             'courses': []
         });
@@ -46,14 +50,7 @@ app.post('/create-user', async (req, res) => {
         console.log('username already exists in db');
         res.status(403).send();
     }
-    // if (!doc.exists) {
-    //     console.log("username doesn't already exist, adding to db");
-    //     const newUserId = crypto.randomBytes(20).toString(credentials.userename);
 
-    // } else {
-    //     console.log("username already exists in db");
-
-    // }
 });
 
 

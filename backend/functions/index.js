@@ -22,7 +22,6 @@ exports.helloWorld = functions.https.onRequest((request, response) => {
 /* ******************************************************************************************** */
 
 /* ---------------------------------------- Accounts ---------------------------------------- */
-
 /* Create user if the username isn't already taken */
 app.post('/create-user', async (req, res) => {
     const {
@@ -33,25 +32,26 @@ app.post('/create-user', async (req, res) => {
     // check that user doesn't already exist
     const usersRef = firebase.firestore().collection('users');
     const doc = await usersRef.doc(username).get();
-    if (!doc.exists) {
-        console.log('username not already in db, creating user');
-
-        // TODO: this needs to be guaranteed different
-        const newUserId = crypto.randomBytes(20).toString('hex'); // userId is calculated once 
-        // TODO: hash this somehow
-        const hashedPassword = password; 
-
-        await usersRef.doc(username).set({
-            'userId': newUserId,
-            'password': hashedPassword,
-            'courses': []
+    if (doc.exists) {
+        res.status(403).send({
+            'error': 'username already exists in db'
         });
-        res.status(201).send();   
-    } else {
-        console.log('username already exists in db');
-        res.status(403).send();
+        return;
     }
+    // if (!doc.exists) {
+    console.log('username not already in db, creating user');
 
+    // TODO: this needs to be guaranteed different
+    const newUserId = crypto.randomBytes(20).toString('hex'); // userId is calculated once 
+    // TODO: hash this somehow
+    const hashedPassword = password; 
+
+    await usersRef.doc(username).set({
+        'userId': newUserId,
+        'password': hashedPassword,
+        'courses': []
+    });
+    res.status(201).send();   
 });
 
 /* Login user by passing back userId */
@@ -67,8 +67,9 @@ app.get('/login', async (req, res) => {
     const usersRef = firebase.firestore().collection('users');
     const doc = await usersRef.doc(username).get();
     if (!doc.exists) {
-        console.log('username not found');
-        res.status(404).send();
+        res.status(404).send({
+            'error': 'username not found'
+        });
         return;
     }
     
@@ -78,33 +79,56 @@ app.get('/login', async (req, res) => {
     } = doc.data();
     if (hashedPassword === storedPassword) {
         res.status(200).send({
-            "username": username,
-            "userId": userId
+            'username': username,
+            'userId': userId
         });
     } else {
-        res.status(401).send();
+        res.status(401).send({
+            'error': 'incorrect password'
+        });
     }
 });
 
 
 /* ---------------------------------------- Courses ---------------------------------------- */
-app.get('/courses', async (req, res) => {
-    const snapshot = await firebase.firestore().collection('courses').get();
+/* Add course to courses collection if it doesn't already exist */
+app.post('/create-course', async (req, res) => {
+    const {
+        courseId,
+        name
+    } = req.body;
+
+    const coursesRef = firebase.firestore().collection('courses');
+    const doc = await coursesRef.doc(courseId).get();
+    if (doc.exists) {
+        res.status(403).send({
+            'error': 'course already exists'
+        });
+        return;
+    }
+    
+    await coursesRef.doc(courseId).set({
+        'name': name,
+        'members': [],
+    });
+    res.status(201).send();
+});
+
+/* Get all courses within thr courses collection */
+app.get('/all-courses', async (req, res) => {
+    const coursesRef = firebase.firestore().collection('courses');
+    const snapshot = await coursesRef.get();
 
     let courses = [];
-    snapshot.forEach(doc => {
-        // console.log(doc.data());
-        courses.push(doc.data())
+    snapshot.forEach(courseDoc => {
+        courses.push({
+            id: courseDoc.id, 
+            ...courseDoc.data()
+        });
     });
-    res.status(200).send(JSON.stringify(courses));
+    
+    res.status(200).send(courses);    
 });
 
-app.post('/courses', async (req, res) => {
-    const course = req.body;
-
-    await firebase.firestore().collection('courses').doc(course.code).set(course);
-
-    res.status(200).send();
-});
 
 exports.api = functions.https.onRequest(app);

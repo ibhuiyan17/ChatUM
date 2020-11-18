@@ -10,11 +10,11 @@ class Page extends React.Component {
   constructor(props) {
     // Initialize mutable state
     super(props);
-    this.state = { posts: [], hasMore: '' };
-    this.fetchmoredata = this.fetchmoredata.bind(this);
+    this.state = { posts: [{username: 'Ibtida', content: 'This class is the best'}, {username: 'Huzefa', content: 'This class is the worst'},
+    {username: 'Mutaman', content: 'This class is my favorite'}, {username: 'Mohammad', content: 'This class is my least favorite'}], courseID: ''};
   }
 
-  componentDidMount() {
+/*   componentDidMount() {
     // This line automatically assigns this.props.url to the const variable url
     const { url } = this.props;
 
@@ -30,25 +30,8 @@ class Page extends React.Component {
         });
       })
       .catch((error) => console.log(error));
-  }
+  } */
 
-  fetchmoredata() {
-    const { hasMore } = this.state;
-    console.log(hasMore);
-    // Call REST API to get number of likes
-    fetch(hasMore, { credentials: 'same-origin' })
-      .then((response) => {
-        if (!response.ok) throw Error(response.statusText);
-        return response.json();
-      })
-      .then((data) => {
-        this.setState((prevState) => ({
-          posts: prevState.posts.concat(data.results),
-          hasMore: data.next,
-        }));
-      })
-      .catch((error) => console.log(error));
-  }
 
   render() {
     // This line automatically assigns this.state.numLikes to the const variable numLikes
@@ -57,7 +40,7 @@ class Page extends React.Component {
     return (
         <div>
           {posts.map((post, i) => (
-            <Post key={i.toString()} url={post.url} />
+            <Post key={i.toString()} content={post.content} owner={post.username}  />
           ))}
         </div>
     );

@@ -1,5 +1,5 @@
 import './App.css';
-
+import Page from './PostsView';
 function App() {
   return (
     <div className="App">

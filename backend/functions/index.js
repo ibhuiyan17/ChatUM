@@ -103,6 +103,7 @@ app.post('/courses/create-course', async (req, res) => {
         name
     } = req.body;
 
+    // check if course already exists
     const doc = await queryRefs.courses.doc(courseId).get();
     if (doc.exists) {
         res.status(403).send({
@@ -161,14 +162,24 @@ app.get('/posts/create-post/', async (req, res) => {
     } = req.body;
     const { courseId } = req.query;
 
+    // TODO: put error checks into one function
+    // check if user exists
     let userDoc = await getUserDocFromUserId(userId);
     if (userDoc === null) {
         res.status(404).send({
-            'error': 'username not found'
+            'error': 'userId not found'
         });
         return;
     }
-    // TODO: add check for if course exists
+    
+    // check if course exists
+    let courseDoc = await getCourseDocFromCourseId(courseId);
+    if (courseDoc === null) {
+        res.status(404).send({
+            'error': 'courseId not found'
+        });
+        return;
+    }
 
     let { username } = userDoc.data();
     let postRef = queryRefs.courses.doc(courseId).collection('posts');
@@ -181,13 +192,20 @@ app.get('/posts/create-post/', async (req, res) => {
     });
     console.log('post added to', courseId);
 
-    res.status(200).send();
+    res.status(201).send();
 });
 
 app.get('/posts/all-posts/', async (req, res) => {
     let { courseId } = req.query;
 
-    // TODO: add check for if courseId exists
+    // check if course exists
+    let courseDoc = await getCourseDocFromCourseId(courseId);
+    if (courseDoc === null) {
+        res.status(404).send({
+            'error': 'courseId not found'
+        });
+        return;
+    }
     
     let postsRef = queryRefs.courses.doc(courseId).collection('posts');
     let snapshot = await postsRef.orderBy('created', 'desc').get(); // latest on top
@@ -214,9 +232,10 @@ let getUserDocFromUserId = async (userId) => {
         null : doc;
 };
 
-let courseIdExists = async (courseId) => {
+let getCourseDocFromCourseId = async (courseId) => {
     const doc = await queryRefs.courses.doc(courseId).get();
-    return doc.exists;
+    return !doc.exists ?
+        null : doc;    
 };
 
 let getUserDocFromUsername = async (username) => {

@@ -53,7 +53,7 @@ function createPost(in_member, in_class, in_content, in_title, state){
 
 // Get posts
 function getPosts(){
-    db.collection("posts").onSnapshot(snapshot => {
+    db.collection("posts").get().then(snapshot => {
         snapshot.docs.forEach(docs => {
             console.log(docs.data());
             createPost(docs.data().Member, docs.data().CourseID, docs.data().Content, docs.data().Title);

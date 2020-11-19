@@ -1,0 +1,36 @@
+.header{
+    height: 150px;
+    position: sticky;
+    top: 0;
+    width: 99%;
+    border-color: #BBBBBB;
+    border-style: solid;
+    background:#2C4762;
+    border-width: 3px;
+}
+
+.header > h1 {
+    color: #DAF1FC;
+    text-align: center;
+}
+
+.header > h2 {
+    color: #DAF1FC;
+    text-align: center;
+}
+
+/* CSS code adapted from https://www.w3schools.com/css/tryit.asp?filename=trycss3_flexbox_flex-wrap_wrap*/
+.flex-container {
+    display: flex;
+    flex-flow: row wrap;
+}
+
+.post {
+    flex-basis: 100%;
+    border: thick solid #000000;
+    padding: 20px;
+    margin: 10px;
+    font-size: large;
+}
+
+/* end */

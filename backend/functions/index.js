@@ -4,7 +4,7 @@ const express = require('express');
 const crypto = require('crypto');
 
 const firebase = require('firebase-admin');
-const { SSL_OP_NO_SESSION_RESUMPTION_ON_RENEGOTIATION } = require('constants');
+const { user } = require('firebase-functions/lib/providers/auth');
 firebase.initializeApp();
 
 const app = express();
@@ -40,7 +40,7 @@ app.post('/accounts/create-user', async (req, res) => {
     } = req.body;
 
     // check that username isn't already taken
-    if (await getUserDoc(username) !== null) {
+    if (await getUserDocFromUsername(username) !== null) {
         res.status(403).send({
             'error': 'username already exists in db'
         });
@@ -70,7 +70,7 @@ app.get('/accounts/login', async (req, res) => {
     
     // TODO: change this later
     const hashedPassword = password;
-    let storedDoc = await getUserDoc(username);
+    let storedDoc = await getUserDocFromUsername(username);
     if (storedDoc === null) {
         res.status(404).send({
             'error': 'username not found'
@@ -103,6 +103,7 @@ app.post('/courses/create-course', async (req, res) => {
         name
     } = req.body;
 
+    // check if course already exists
     const doc = await queryRefs.courses.doc(courseId).get();
     if (doc.exists) {
         res.status(403).send({
@@ -111,7 +112,8 @@ app.post('/courses/create-course', async (req, res) => {
         return;
     }
     
-    await queryRefs.courses.doc(courseId).set({
+    let courseRef = queryRefs.courses.doc(courseId);
+    await courseRef.set({
         'name': name,
         'members': [],
     });
@@ -135,9 +137,10 @@ app.get('/courses/all-courses', async (req, res) => {
 
 /* User subscribe to course '/courses/subscribe-course?courseId={courseId}' */
 app.post('/courses/subscribe-course', async (req, res) => {
-    const {userId} = req.body;
-    const {courseId} = req.query;
+    const { userId } = req.body;
+    const { courseId } = req.query;
     
+
 });
 
 app.post('/courses/unsubscribe-course', async (req, res) => {
@@ -149,21 +152,93 @@ app.get('/courses/subscribed-courses', async (req, res) => {
 });
 
 
+/* ---------------------------------------- Posts ---------------------------------------- */
+/* Create a post as a document in the course's subcollection */
+app.get('/posts/create-post/', async (req, res) => {
+    const {
+        userId,
+        content,
+        type
+    } = req.body;
+    const { courseId } = req.query;
+
+    // TODO: put error checks into one function
+    // check if user exists
+    let userDoc = await getUserDocFromUserId(userId);
+    if (userDoc === null) {
+        res.status(404).send({
+            'error': 'userId not found'
+        });
+        return;
+    }
+    
+    // check if course exists
+    let courseDoc = await getCourseDocFromCourseId(courseId);
+    if (courseDoc === null) {
+        res.status(404).send({
+            'error': 'courseId not found'
+        });
+        return;
+    }
+
+    let { username } = userDoc.data();
+    let postRef = queryRefs.courses.doc(courseId).collection('posts');
+    await postRef.add({
+        'author': username,
+        'content': content,
+        'type': type,
+        'created': firebase.firestore.Timestamp.now(),
+        'likes': []
+    });
+    console.log('post added to', courseId);
+
+    res.status(201).send();
+});
+
+app.get('/posts/all-posts/', async (req, res) => {
+    let { courseId } = req.query;
+
+    // check if course exists
+    let courseDoc = await getCourseDocFromCourseId(courseId);
+    if (courseDoc === null) {
+        res.status(404).send({
+            'error': 'courseId not found'
+        });
+        return;
+    }
+    
+    let postsRef = queryRefs.courses.doc(courseId).collection('posts');
+    let snapshot = await postsRef.orderBy('created', 'desc').get(); // latest on top
+    
+    let posts = [];
+    snapshot.forEach(postDoc => {
+        posts.push({
+            id: postDoc.id,
+            ...postDoc.data()
+        })
+    });
+
+    res.status(200).send(posts);
+});
+
+
 /* ******************************************************************************************** */
 /* ---------------------------------------- Helper Funcs. ------------------------------------- */
 /* ******************************************************************************************** */
 // helper function for validating userId exists within db
-let userIdExists = async (userId) => {
+let getUserDocFromUserId = async (userId) => {
     const doc = await queryRefs.users.doc(userId).get();
-    return doc.exists;
+    return !doc.exists ?
+        null : doc;
 };
 
-let courseIdExists = async (courseId) => {
+let getCourseDocFromCourseId = async (courseId) => {
     const doc = await queryRefs.courses.doc(courseId).get();
-    return doc.exists;
+    return !doc.exists ?
+        null : doc;    
 };
 
-let getUserDoc = async (username) => {
+let getUserDocFromUsername = async (username) => {
     const snapshot = await queryRefs.users.where('username', '==', username).get();
     return snapshot.empty ?
         null : snapshot.docs[0];

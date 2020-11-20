@@ -15,6 +15,7 @@ var firebaseConfig = {
   firebase.analytics();
 
 let postCollection = document.querySelector("#posts-collection");
+let commentCollection = document.querySelector("#comments-collection");
 console.log(postCollection);
 
 document.addEventListener("DOMContentLoaded", event => {
@@ -25,36 +26,42 @@ const db = firebase.firestore();
 
 
 
-function createPost(in_member, in_class, in_content, in_title, key){
+function createPost(in_member, in_class, in_content, in_title){
     let div = document.createElement("div");
     div.setAttribute("class", "post");
-    //div.style.border = "thick solid #000000";
-    //div.style.width = 50;
-    
+
     let title = document.createElement("h2");
     let post_content = document.createElement("p");
     let member = document.createElement("p");
     let class_id = document.createElement("h1");
-    let comments = document.createElement("button");
+
 
 
     member.textContent = "Member: " + in_member;
     post_content.textContent = in_content;
     title.textContent = "Title: " + in_title;
     class_id.textContent = "Class: " + in_class;
-    comments.textContent = "Comments";
-    comments.setAttribute("onclick", "sessionStorage.setItem('post_id', this.id); window.location = 'comments.html'");
-    //comments.setAttribute("onClick", "");
-    comments.setAttribute("id", key)
-    console.log(sessionStorage.getItem("post_id"));
 
     div.appendChild(class_id);
     div.appendChild(title);
     div.appendChild(member);
     div.appendChild(post_content);
-    div.appendChild(comments);
 
     postCollection.appendChild(div);
+}
+
+function createComment(in_comment){
+    let div = document.createElement("div");
+    div.setAttribute("class", "post");
+
+    let comment = document.createElement("p");
+
+    comment.textContent = in_comment;
+
+    div.appendChild(comment);
+
+
+    commentCollection.appendChild(div);
 }
 
 console.log("name of current user is: " + sessionStorage.getItem('name'));
@@ -62,14 +69,20 @@ console.log("name of current class is: " + sessionStorage.getItem('class_id'));
 
 // Get posts
 function getPosts(){
-    db.collection(sessionStorage.getItem('class_id')).get().then(snapshot => {
-    //db.collection("posts").querySelector
-    //db.collection("posts").CourseID("EECS 376").get().then(snapshot => {
+    console.log("post: " +sessionStorage.getItem('post_id'));
+    db.collection(sessionStorage.getItem('class_id')).doc(sessionStorage.getItem('post_id')).get().then(snapshot => {
+        createPost(snapshot.data().Member, snapshot.data().CourseID, snapshot.data().Content, snapshot.data().Title);
+        snapshot.data().Comments.forEach(comment => createComment(comment));
+        console.log(snapshot.data());
+    });
+
+
+    /*db.collection(sessionStorage.getItem('class_id')).get().then(snapshot => {
         snapshot.docs.forEach(docs => {
             console.log(docs.data());
             createPost(docs.data().Member, docs.data().CourseID, docs.data().Content, docs.data().Title, docs.id);
         });
-    });
+    });*/
 }
 
 getPosts();

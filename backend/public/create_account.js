@@ -1,3 +1,5 @@
+
+
 document.querySelector("#accountSubmit").addEventListener('click',
 function() {
     let name = document.querySelector("#name").value;
@@ -11,6 +13,9 @@ function() {
       ) {
         alert("Fields Empty");
       } else {
+        sessionStorage.setItem('name', name);
+        sessionStorage.setItem('class_id', class_id);
+        
         db.collection("users")
           .doc()
           .set({

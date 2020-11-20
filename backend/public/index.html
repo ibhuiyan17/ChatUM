@@ -45,12 +45,25 @@
     </style>
   </head>
   <body>
-    <div class="header">
+    
+    <div class="header" style="height: 220px">
       <h1>ChatUM</h1>
       <h2>Meet your peers.</h2>
+      <p style="color: white" id="current_user"></p>
+      <p style="color: white" id="current_class"></p>
       <button type="button" onclick="window.location='create_post.html'">Create Post</button>
       <button type="button" onclick="window.location='create_account.html'">Create Account</button>
     </div>
+
+    <script>
+      if(sessionStorage.getItem('name', name) == null){
+        document.getElementById("current_user").innerHTML = "You haven't logged in yet!";
+      }else{
+        document.getElementById("current_user").innerHTML = "Current user: " + sessionStorage.getItem('name');
+        document.getElementById("current_class").innerHTML = "Current class: " + sessionStorage.getItem('class_id');
+      }
+      
+    </script>
 
     <div class="flex-container" id="posts-collection">
     </div>

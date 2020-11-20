@@ -23,6 +23,8 @@ document.addEventListener("DOMContentLoaded", event => {
 
 const db = firebase.firestore();
 
+
+
 function createPost(in_member, in_class, in_content, in_title, state){
     let div = document.createElement("div");
     div.setAttribute("class", "post");
@@ -51,9 +53,14 @@ function createPost(in_member, in_class, in_content, in_title, state){
     postCollection.appendChild(div);
 }
 
+console.log("name of current user is: " + sessionStorage.getItem('name'));
+console.log("name of current class is: " + sessionStorage.getItem('class_id'));
+
 // Get posts
 function getPosts(){
-    db.collection("posts").get().then(snapshot => {
+    db.collection(sessionStorage.getItem('class_id')).get().then(snapshot => {
+    //db.collection("posts").querySelector
+    //db.collection("posts").CourseID("EECS 376").get().then(snapshot => {
         snapshot.docs.forEach(docs => {
             console.log(docs.data());
             createPost(docs.data().Member, docs.data().CourseID, docs.data().Content, docs.data().Title);

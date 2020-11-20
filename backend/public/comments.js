@@ -34,18 +34,20 @@ function createPost(in_member, in_class, in_content, in_title){
     let post_content = document.createElement("p");
     let member = document.createElement("p");
     let class_id = document.createElement("h1");
-
-
+    let comments = document.createElement("button");
 
     member.textContent = "Member: " + in_member;
     post_content.textContent = in_content;
     title.textContent = "Title: " + in_title;
     class_id.textContent = "Class: " + in_class;
+    comments.textContent = "Add Comment";
+    comments.setAttribute("onclick", "window.location = 'create_comment.html'");
 
     div.appendChild(class_id);
     div.appendChild(title);
     div.appendChild(member);
     div.appendChild(post_content);
+    div.appendChild(comments);
 
     postCollection.appendChild(div);
 }
@@ -55,11 +57,10 @@ function createComment(in_comment){
     div.setAttribute("class", "post");
 
     let comment = document.createElement("p");
-
+    
     comment.textContent = in_comment;
-
+    
     div.appendChild(comment);
-
 
     commentCollection.appendChild(div);
 }

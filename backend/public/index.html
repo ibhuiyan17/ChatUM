@@ -5,13 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="style.css">
     <title>ChatUM</title>
-
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <!-- update the version number as needed -->
     <script src="https://www.gstatic.com/firebasejs/8.0.2/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.0.2/firebase-analytics.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.0.2/firebase-firestore.js"></script>
 
-    <!-- include only the Firebase features as you need 
+    <!-- include only the Firebase features as you need
     <script defer src="/__/firebase/8.0.2/firebase-auth.js"></script>
     <script defer src="/__/firebase/8.0.2/firebase-database.js"></script>
     <script defer src="/__/firebase/8.0.2/firebase-firestore.js"></script>
@@ -22,12 +22,12 @@
     <script defer src="/__/firebase/8.0.2/firebase-remote-config.js"></script>
     <script defer src="/__/firebase/8.0.2/firebase-performance.js"></script>
     -->
-    <!-- 
+    <!--
       initialize the SDK after all desired features are loaded, set useEmulator to false
       to avoid connecting the SDK to running emulators.
     -->
     <script defer src="/__/firebase/init.js?useEmulator=true"></script>
-    
+
 
     <style media="screen">
       body { background: #ECEFF1; color: rgba(0,0,0,0.87); font-family: Roboto, Helvetica, Arial, sans-serif; margin: 0; padding: 0; }
@@ -45,14 +45,14 @@
     </style>
   </head>
   <body>
-    
+
     <div class="header" style="height: 220px">
       <h1>ChatUM</h1>
       <h2>Meet your peers.</h2>
       <p style="color: white" id="current_user"></p>
       <p style="color: white" id="current_class"></p>
-      <button type="button" onclick="window.location='create_post.html'">Create Post</button>
-      <button type="button" onclick="window.location='create_account.html'">Create Account</button>
+      <button type="button" class="btn btn-primary" onclick="window.location='create_post.html'">Create Post</button>
+      <button type="button" class="btn-primary" onclick="window.location='create_account.html'">Create Account</button>
     </div>
 
     <script>
@@ -62,12 +62,12 @@
         document.getElementById("current_user").innerHTML = "Current user: " + sessionStorage.getItem('name');
         document.getElementById("current_class").innerHTML = "Current class: " + sessionStorage.getItem('class_id');
       }
-      
+
     </script>
 
     <div class="flex-container" id="posts-collection">
     </div>
-    
+
     <script src="app.js"></script>
 
     <script>
@@ -92,13 +92,13 @@
         try {
           let app = firebase.app();
           let features = [
-            'auth', 
-            'database', 
+            'auth',
+            'database',
             'firestore',
             'functions',
-            'messaging', 
-            'storage', 
-            'analytics', 
+            'messaging',
+            'storage',
+            'analytics',
             'remoteConfig',
             'performance',
           ].filter(feature => typeof app[feature] === 'function');
@@ -109,5 +109,8 @@
         }*/
       });
     </script>
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
   </body>
 </html>

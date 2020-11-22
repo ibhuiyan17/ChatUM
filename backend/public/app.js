@@ -15,10 +15,11 @@ var firebaseConfig = {
   firebase.analytics();
 
 let postCollection = document.querySelector("#posts-collection");
+let sideBar = document.querySelector("#sidebar");
 console.log(postCollection);
 
 document.addEventListener("DOMContentLoaded", event => {
-    
+
 });
 
 const db = firebase.firestore();
@@ -30,7 +31,7 @@ function createPost(in_member, in_class, in_content, in_title, key){
     div.setAttribute("class", "post");
     //div.style.border = "thick solid #000000";
     //div.style.width = 50;
-    
+
     let title = document.createElement("h2");
     let post_content = document.createElement("p");
     let member = document.createElement("p");
@@ -57,6 +58,19 @@ function createPost(in_member, in_class, in_content, in_title, key){
     postCollection.appendChild(div);
 }
 
+// parameters are class_id and class name
+function createSidebar(class_id_in, class_name){
+    let div = document.createElement("div");
+    div.setAttribute("class", "list-group-item list-group-item-action");
+    div.addEventListener("click", () => {
+        sessionStorage.setItem('class_id', class_id_in)
+        window.location.reload();
+    })
+    div.innerText = class_name;
+    sideBar.appendChild(div);
+    console.log(sessionStorage.getItem('class_id'));
+}
+
 console.log("name of current user is: " + sessionStorage.getItem('name'));
 console.log("name of current class is: " + sessionStorage.getItem('class_id'));
 
@@ -64,6 +78,7 @@ console.log("name of current class is: " + sessionStorage.getItem('class_id'));
 function getPosts(){
     db.collection(sessionStorage.getItem('class_id')).get().then(snapshot => {
     //db.collection("posts").querySelector
+    // db.collection()
     //db.collection("posts").CourseID("EECS 376").get().then(snapshot => {
         snapshot.docs.forEach(docs => {
             console.log(docs.data());

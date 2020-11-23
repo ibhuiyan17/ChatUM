@@ -1,13 +1,14 @@
 const functions = require('firebase-functions');
 const express = require('express');
+var cors = require('cors');
 
 const crypto = require('crypto');
 
 const firebase = require('firebase-admin');
-const { user } = require('firebase-functions/lib/providers/auth');
 firebase.initializeApp();
 
 const app = express();
+app.use(cors({origin:true,credentials: true}));
 
 // Create and Deploy Your First Cloud Functions
 // https://firebase.google.com/docs/functions/write-firebase-functions

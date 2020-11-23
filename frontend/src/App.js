@@ -1,7 +1,10 @@
 import logo from './logo.svg';
 import './App.css';
+import './components/Button'
+import Button from './components/Button';
 
 function App() {
+
   return (
     <div className="App">
       <header className="App-header">
@@ -18,6 +21,7 @@ function App() {
           Learn React
         </a>
       </header>
+      <Button></Button>
     </div>
   );
 }

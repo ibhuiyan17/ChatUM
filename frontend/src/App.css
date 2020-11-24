@@ -36,3 +36,66 @@
     transform: rotate(360deg);
   }
 }
+
+.header{
+  height: 150px;
+  position: sticky;
+  top: 0;
+  width: 99%;
+  border-color: #BBBBBB;
+  border-style: solid;
+  background:#2C4762;
+  border-width: 3px;
+}
+
+.header > h1 {
+  color: #DAF1FC;
+  text-align: center;
+}
+
+.header > h2 {
+  color: #DAF1FC;
+  text-align: center;
+}
+
+/* .sidebar {
+  text-align: left;
+} */
+
+/* The sidebar menu */
+/* https://www.w3schools.com/howto/howto_css_fixed_sidebar.asp */
+.sidebar {
+  height: 100%; /* Full-height: remove this if you want "auto" height */
+  width: 160px; /* Set the width of the sidebar */
+  position: fixed; /* Fixed Sidebar (stay in place on scroll) */
+  z-index: 1; /* Stay on top */
+  top: 150; /* Stay at the top */
+  left: 0;
+  background-color: white;
+  overflow-x: hidden; /* Disable horizontal scroll */
+  padding-top: 20px;
+}
+
+/* CSS code adapted from https://www.w3schools.com/css/tryit.asp?filename=trycss3_flexbox_flex-wrap_wrap*/
+.flex-container {
+  display: flex;
+  flex-flow: row wrap;
+  z-index: -1;
+}
+
+.post {
+  flex-basis: 100%;
+  border: thick solid #000000;
+  padding: 20px;
+  margin: 10px;
+  font-size: large;
+}
+
+.scrollable {
+  overflow-y: auto;
+  height: 75%;
+}
+
+
+/* end */
+

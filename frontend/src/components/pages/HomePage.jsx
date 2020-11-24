@@ -1,39 +1,40 @@
 import React, { Component } from 'react';
+import Dropdown from 'react-bootstrap/Dropdown';
 import axios from 'axios';
+
+import Sidebar from '../Sidebar'
+import Posts from '../Posts'
 
 class HomePage extends Component {
 	constructor(props) {
 		super(props)
 
 		this.state = {
-			courses : []
-		};
-	}
+      selectedCourse: ''
+    };
+    
+    this.updateSelectedCourse = this.updateSelectedCourse.bind(this);
+  }
+  
+  updateSelectedCourse(courseId) {
+    this.setState({ selectedCourse: courseId }, () => console.log('course updated to', courseId));
+  }
 
-async componentDidMount() {
-	const url = 'http://localhost:5001/webapp-17d6b/us-central1/api/courses/subscribed-courses/'
-
-	const courses = await axios.get(url, {
-		'userId': this.props.userId
-	});
-	this.setState({ courses }, () => console.log('fetched my courses:', this.state.courses));
-
-}
 
 	render() {
+    const { userId } = this.props;
+
 		return(
 			<>
-				<div>
-					<h1>{this.props.userId}</h1>
-				</div>
-						<div>
-								{this.state.courses.map((course, i) => (
-										<p key={i.toString()}>
-												{ course.name }
-										</p>
-									))}
-						</div>
-
+        <Sidebar
+          userId={ userId }
+          selectedCourse={ this.state.selectedCourse }
+          updateCourseHandler={ this.updateSelectedCourse }
+        />
+        <p>userId={userId}</p>
+        <Posts
+          selectedCourse={ this.state.selectedCourse }
+        />
 			</>
 		)
 	}

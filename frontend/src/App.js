@@ -1,5 +1,7 @@
-import logo from './logo.svg';
+import 'bootstrap/dist/css/bootstrap.min.css';
+
 import './App.css';
+
 
 import React, { Component } from 'react';
 
@@ -28,6 +30,10 @@ class App extends Component {
   render () {
     return(
       <div className="App">
+        <div className="header">
+          <h1>ChatUM</h1>
+          <h2>Meet your peers</h2>
+        </div>
         {this.state.userId === '' ? <LoginPage userIdHandler={ this.userIdHandler }/> : <HomePage userId={ this.state.userId }/>}
       </div>
     );

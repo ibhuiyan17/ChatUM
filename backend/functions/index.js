@@ -177,8 +177,9 @@ app.post('/courses/unsubscribe-course', async (req, res) => {
 });
 
 app.get('/courses/subscribed-courses', async (req, res) => {
-    let { userId } = req.body;
+    let { userId } = req.query;
 
+    console.log('userId', userId);
     // check if user exists
     let userDoc = await getUserDocFromUserId(userId);
     if (userDoc === null) {

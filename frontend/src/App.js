@@ -16,7 +16,7 @@ class App extends Component {
     super(props);
 
     this.state = {
-      userId: ''
+      userId: '' // TODO: change this to ''
     };
 
     this.userIdHandler = this.userIdHandler.bind(this);

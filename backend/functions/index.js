@@ -209,11 +209,12 @@ app.get('/courses/subscribed-courses', async (req, res) => {
 /* Create a post as a document in the course's subcollection */
 app.get('/posts/create-post/', async (req, res) => {
     const {
-        userId,
+        courseId,
+        title,
         content,
         type
     } = req.body;
-    const { courseId } = req.query;
+    const { userId } = req.query;
 
     // TODO: put error checks into one function
     // check if user exists
@@ -238,6 +239,7 @@ app.get('/posts/create-post/', async (req, res) => {
     let postRef = queryRefs.courses.doc(courseId).collection('posts');
     await postRef.add({
         'author': username,
+        'title': title,
         'content': content,
         'type': type,
         'created': firebase.firestore.Timestamp.now(),

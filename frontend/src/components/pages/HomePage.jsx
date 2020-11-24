@@ -22,18 +22,19 @@ class HomePage extends Component {
 
 
 	render() {
-    const { userId } = this.props;
+    let { userId } = this.props;
+    let { selectedCourse } = this.state;
 
 		return(
 			<>
         <Sidebar
           userId={ userId }
-          selectedCourse={ this.state.selectedCourse }
+          selectedCourse={ selectedCourse }
           updateCourseHandler={ this.updateSelectedCourse }
         />
         <p>userId={userId}</p>
         <Posts
-          selectedCourse={ this.state.selectedCourse }
+          selectedCourse={ selectedCourse }
         />
 			</>
 		)

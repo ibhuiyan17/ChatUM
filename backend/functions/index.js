@@ -1,5 +1,6 @@
 const functions = require('firebase-functions');
 const express = require('express');
+var cors = require('cors');
 
 const crypto = require('crypto');
 
@@ -8,6 +9,7 @@ const { user } = require('firebase-functions/lib/providers/auth');
 firebase.initializeApp();
 
 const app = express();
+app.use(cors({origin:true,credentials: true}));
 
 // Create and Deploy Your First Cloud Functions
 // https://firebase.google.com/docs/functions/write-firebase-functions
@@ -66,7 +68,7 @@ app.get('/accounts/login', async (req, res) => {
     const {
         username,
         password
-    } = req.body;
+    } = req.query;
     
     // TODO: change this later
     const hashedPassword = password;
@@ -77,6 +79,7 @@ app.get('/accounts/login', async (req, res) => {
         });
         return;    
     }
+    console.log('hi')
 
     const userId = storedDoc.id
     const {
@@ -137,9 +140,35 @@ app.get('/courses/all-courses', async (req, res) => {
 
 /* User subscribe to course '/courses/subscribe-course?courseId={courseId}' */
 app.post('/courses/subscribe-course', async (req, res) => {
-    const { userId } = req.body;
-    const { courseId } = req.query;
+    const { courseId } = req.body;
+    const { userId } = req.query;
+
+    console.log(userId, courseId);
+
+    // check if user exists
+    let userDoc = await getUserDocFromUserId(userId);
+    if (userDoc === null) {
+        res.status(404).send({
+            'error': 'userId not found'
+        });
+        return;
+    }
     
+    // check if course exists
+    let courseDoc = await getCourseDocFromCourseId(courseId);
+    if (courseDoc === null) {
+        res.status(404).send({
+            'error': 'courseId not found'
+        });
+        return;
+    }
+
+    const subscribedCoursesRef = queryRefs.users.doc(userId).collection('courses');
+    await subscribedCoursesRef.doc(courseId).set({
+        'name': courseDoc.data().name 
+    });
+    console.log('course', courseId, 'added for user', userId);
+    res.status(201).send();
 
 });
 
@@ -148,19 +177,46 @@ app.post('/courses/unsubscribe-course', async (req, res) => {
 });
 
 app.get('/courses/subscribed-courses', async (req, res) => {
+    let { userId } = req.query;
 
+    console.log('userId', userId);
+    // check if user exists
+    let userDoc = await getUserDocFromUserId(userId);
+    if (userDoc === null) {
+        res.status(404).send({
+            'error': 'userId not found'
+        });
+        return;
+    }
+
+    const subscribedCoursesRef = queryRefs.users.doc(userId).collection('courses');
+    const snapshot = await subscribedCoursesRef.get()
+
+    let courses = [];
+    snapshot.forEach(courseDoc => {
+        courses.push({
+            id: courseDoc.id,
+            ...courseDoc.data()
+        })
+    });
+
+    res.status(200).send(courses);
+    
 });
 
 
 /* ---------------------------------------- Posts ---------------------------------------- */
 /* Create a post as a document in the course's subcollection */
-app.get('/posts/create-post/', async (req, res) => {
+app.post('/posts/create-post/', async (req, res) => {
     const {
-        userId,
+        courseId,
+        title,
         content,
         type
     } = req.body;
-    const { courseId } = req.query;
+    const { userId } = req.query;
+
+    console.log(courseId, title, content, type, userId);
 
     // TODO: put error checks into one function
     // check if user exists
@@ -185,6 +241,7 @@ app.get('/posts/create-post/', async (req, res) => {
     let postRef = queryRefs.courses.doc(courseId).collection('posts');
     await postRef.add({
         'author': username,
+        'title': title,
         'content': content,
         'type': type,
         'created': firebase.firestore.Timestamp.now(),

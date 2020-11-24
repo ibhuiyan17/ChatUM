@@ -1,29 +1,37 @@
 import logo from './logo.svg';
 import './App.css';
+
+import React, { Component } from 'react';
+
 import './components/Button'
 import Button from './components/Button';
+import HomePage from './components/pages/HomePage';
+import LoginPage from './components/pages/LoginPage';
 
-function App() {
 
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-      <Button></Button>
-    </div>
-  );
+class App extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      userId: ''
+    };
+
+    this.userIdHandler = this.userIdHandler.bind(this);
+  }
+
+  // passed into LoginPage component to set userId
+  userIdHandler = (userId) => {
+    this.setState({ userId }, () => console.log('userId set to', userId));
+  };
+
+  render () {
+    return(
+      <div className="App">
+        {this.state.userId === '' ? <LoginPage userIdHandler={ this.userIdHandler }/> : <HomePage userId={ this.state.userId }/>}
+      </div>
+    );
+  }
 }
 
 export default App;

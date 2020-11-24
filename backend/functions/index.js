@@ -5,6 +5,7 @@ var cors = require('cors');
 const crypto = require('crypto');
 
 const firebase = require('firebase-admin');
+const { user } = require('firebase-functions/lib/providers/auth');
 firebase.initializeApp();
 
 const app = express();
@@ -67,7 +68,7 @@ app.get('/accounts/login', async (req, res) => {
     const {
         username,
         password
-    } = req.body;
+    } = req.query;
     
     // TODO: change this later
     const hashedPassword = password;
@@ -78,6 +79,7 @@ app.get('/accounts/login', async (req, res) => {
         });
         return;    
     }
+    console.log('hi')
 
     const userId = storedDoc.id
     const {
@@ -140,7 +142,33 @@ app.get('/courses/all-courses', async (req, res) => {
 app.post('/courses/subscribe-course', async (req, res) => {
     const { userId } = req.body;
     const { courseId } = req.query;
+
+    console.log(userId, courseId);
+
+    // check if user exists
+    let userDoc = await getUserDocFromUserId(userId);
+    if (userDoc === null) {
+        res.status(404).send({
+            'error': 'userId not found'
+        });
+        return;
+    }
     
+    // check if course exists
+    let courseDoc = await getCourseDocFromCourseId(courseId);
+    if (courseDoc === null) {
+        res.status(404).send({
+            'error': 'courseId not found'
+        });
+        return;
+    }
+
+    const subscribedCoursesRef = queryRefs.users.doc(userId).collection('courses');
+    await subscribedCoursesRef.doc(courseId).set({
+        'name': courseDoc.data().name 
+    });
+    console.log('course', courseId, 'added for user', userId);
+    res.status(201).send();
 
 });
 
@@ -149,7 +177,30 @@ app.post('/courses/unsubscribe-course', async (req, res) => {
 });
 
 app.get('/courses/subscribed-courses', async (req, res) => {
+    let { userId } = req.body;
 
+    // check if user exists
+    let userDoc = await getUserDocFromUserId(userId);
+    if (userDoc === null) {
+        res.status(404).send({
+            'error': 'userId not found'
+        });
+        return;
+    }
+
+    const subscribedCoursesRef = queryRefs.users.doc(userId).collection('courses');
+    const snapshot = await subscribedCoursesRef.get()
+
+    let courses = [];
+    snapshot.forEach(courseDoc => {
+        courses.push({
+            id: courseDoc.id,
+            ...courseDoc.data()
+        })
+    });
+
+    res.status(200).send(courses);
+    
 });
 
 

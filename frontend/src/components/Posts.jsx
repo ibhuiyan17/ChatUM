@@ -18,10 +18,17 @@ class Posts extends Component {
   }
   
   componentDidUpdate(prevProps) {
-    let { selectedCourse } = this.props;
+    let { selectedCourse, refreshPostsFlag, postsRefreshComplete } = this.props;
+    
     if (selectedCourse !== prevProps.selectedCourse) {
       console.log('fetching posts for', selectedCourse);
       this.fetchPosts(selectedCourse);
+    }
+    
+    // if refresh posts is set true, refresh
+    if (refreshPostsFlag) {
+      this.fetchPosts(selectedCourse);
+      postsRefreshComplete();
     }
   }
 

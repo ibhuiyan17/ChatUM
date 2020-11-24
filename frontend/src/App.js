@@ -7,8 +7,8 @@ import React, { Component } from 'react';
 
 import './components/Button'
 import Button from './components/Button';
-import HomePage from './components/pages/HomePage';
-import LoginPage from './components/pages/LoginPage';
+import HomePage from './views/HomePage';
+import LoginPage from './views/LoginPage';
 
 
 class App extends Component {
@@ -16,7 +16,8 @@ class App extends Component {
     super(props);
 
     this.state = {
-      userId: '' // TODO: change this to ''
+      // userId: '6194c2603badb6159599660efa2686a48d122807' // TODO: change this to ''
+      userId: ''
     };
 
     this.userIdHandler = this.userIdHandler.bind(this);

@@ -17,10 +17,10 @@ class Post extends Component {
     let { author, title, content, likes } = this.props;
     
     return(
-			<div className="post">
+		  <div className="post">
         <p className="title">{title}</p>
         <p className="author">{author}</p>
-        <p classname="content">{content}</p>
+        <p className="content">{content}</p>
       </div>
 		)
 	}

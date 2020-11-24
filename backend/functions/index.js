@@ -207,7 +207,7 @@ app.get('/courses/subscribed-courses', async (req, res) => {
 
 /* ---------------------------------------- Posts ---------------------------------------- */
 /* Create a post as a document in the course's subcollection */
-app.get('/posts/create-post/', async (req, res) => {
+app.post('/posts/create-post/', async (req, res) => {
     const {
         courseId,
         title,
@@ -215,6 +215,8 @@ app.get('/posts/create-post/', async (req, res) => {
         type
     } = req.body;
     const { userId } = req.query;
+
+    console.log(courseId, title, content, type, userId);
 
     // TODO: put error checks into one function
     // check if user exists

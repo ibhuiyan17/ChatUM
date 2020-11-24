@@ -2,7 +2,7 @@
   text-align: center;
 }
 
-.App-logo {
+/* .App-logo {
   height: 40vmin;
   pointer-events: none;
 }
@@ -35,13 +35,15 @@
   to {
     transform: rotate(360deg);
   }
-}
+} */
 
 .header{
   height: 150px;
   position: sticky;
   top: 0;
-  width: 99%;
+  /* margin-left: 10px;
+  margin-right: 10px; */
+  width: 100%;
   border-color: #BBBBBB;
   border-style: solid;
   background:#2C4762;
@@ -85,6 +87,7 @@
 
 .postsContainer {
   margin-left: 170px;
+  margin-top: 75px;
 }
 
 .post {
@@ -107,6 +110,12 @@
 
 .post .content {
 
+}
+
+.newPostButton {
+  float: right;
+  margin-top: 10px;
+  margin-right: 10px;
 }
 
 .scrollable {

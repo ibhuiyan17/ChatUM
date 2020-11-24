@@ -57,7 +57,7 @@ class NewPost extends Component {
     this.hideModal();
   };
 
-  showModal = (e) => {
+  showModal = () => {
     // e.preventDefault();
     this.setState({ 
       showModal: true

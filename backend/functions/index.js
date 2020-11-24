@@ -140,8 +140,8 @@ app.get('/courses/all-courses', async (req, res) => {
 
 /* User subscribe to course '/courses/subscribe-course?courseId={courseId}' */
 app.post('/courses/subscribe-course', async (req, res) => {
-    const { userId } = req.body;
-    const { courseId } = req.query;
+    const { courseId } = req.body;
+    const { userId } = req.query;
 
     console.log(userId, courseId);
 

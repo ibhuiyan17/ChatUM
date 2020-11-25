@@ -19,7 +19,7 @@ class LoginPage extends Component {
     this.loginAndSetUserId = this.loginAndSetUserId.bind(this);
     this.handleChange = this.handleChange.bind(this);
   }
-  
+
   // login handler
   loginButtonClicked = async () => {
     console.log('login button clicked')
@@ -31,18 +31,18 @@ class LoginPage extends Component {
     console.log('register button clicked');
     let url = 'http://localhost:5001/webapp-17d6b/us-central1/api/accounts/create-user';
 
-    let { 
+    let {
       registrationUsername: username,
       registrationPassword: password
     } = this.state;
-    
+
     try {
       await axios.post(url, {
         'username': username,
         'password': password
       });
       console.log('successfully created user');
-      
+
       this.loginAndSetUserId(username, password);
     } catch (err) {
       let { error: msg } = err.response.data;
@@ -71,7 +71,7 @@ class LoginPage extends Component {
       let { error: msg } = err.response.data;
       console.log(msg);
       alert(msg);
-    }    
+    }
   }
 
   // update state with username/password
@@ -80,13 +80,13 @@ class LoginPage extends Component {
 
     if (id === 'loginUsername') {
       this.setState({ loginUsername: event.target.value });
-    } 
+    }
     else if (id === 'loginPassword') {
       this.setState({ loginPassword: event.target.value });
-    } 
+    }
     else if (id === 'registrationUsername') {
       this.setState({ registrationUsername: event.target.value });
-    } 
+    }
     else if (id === 'registrationPassword') {
       this.setState({ registrationPassword: event.target.value });
     }
@@ -111,7 +111,7 @@ class LoginPage extends Component {
               <br></br>
               <label>password</label>
               <input
-                type="text"
+                type="password"
                 id="loginPassword"
                 name="loginPassword"
                 value={ this.state.loginPassword }
@@ -119,9 +119,9 @@ class LoginPage extends Component {
               </input>
             </div>
           </form>
-          <button onClick={ this.loginButtonClicked }>login</button>
+          <button class="btn btn-success" onClick={ this.loginButtonClicked }>login</button>
         </div>
-        <div className="register"> 
+        <div className="register">
           <h1>Create an Account</h1>
           {/* TODO: form stuff, bind to state */}
           <form>
@@ -132,12 +132,12 @@ class LoginPage extends Component {
                 id="registrationUsername"
                 name="registrationUsername"
                 value={ this.state.registrationUsername }
-                onChange={ this.handleChange }>   
+                onChange={ this.handleChange }>
               </input>
               <br></br>
               <label>password</label>
               <input
-                type="text"
+                type="password"
                 id="registrationPassword"
                 name="registrationPassword"
                 value={ this.state.registrationPassword }
@@ -145,15 +145,15 @@ class LoginPage extends Component {
               </input>
             </div>
           </form>
-          <button onClick={ this.registerButtonClicked }>create account</button>
+          <button class="btn btn-primary" onClick={ this.registerButtonClicked }>create account</button>
         </div>
-        
 
-        
+
+
       </div>
-        
+
     );
-  }   
+  }
 }
 
 export default LoginPage;

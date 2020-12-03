@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import Nav from 'react-bootstrap/Nav';
 import JoinDropdown from './JoinDropdown';
+import Subscribe from './Subscribe';
 
 import axios from 'axios';
 
@@ -14,10 +15,23 @@ class Sidebar extends Component {
     }
 
     this.handleClick = this.handleClick.bind(this)
+    this.refresh = this.refresh.bind(this);
   }
 
   async componentDidMount() {
-	  const url = 'http://localhost:5001/webapp-17d6b/us-central1/api/courses/subscribed-courses/'
+	  this.refresh()
+  }
+
+  handleClick = (courseId) => {
+    // console.log('sidebar clicked for', courseId);
+    console.log('clicked', courseId)
+    if (courseId !== this.props.selectedCourse) {
+      this.props.updateCourseHandler(courseId);
+    }
+  };
+
+  async refresh() {
+    const url = 'http://localhost:5001/webapp-17d6b/us-central1/api/courses/subscribed-courses/'
 
     const {
       data: courses
@@ -31,20 +45,13 @@ class Sidebar extends Component {
     this.setState({ courses }, () => console.log('fetched my courses:', this.state.courses));
   }
 
-  handleClick = (courseId) => {
-    // console.log('sidebar clicked for', courseId);
-    console.log('clicked', courseId)
-    if (courseId !== this.props.selectedCourse) {
-      this.props.updateCourseHandler(courseId);
-    }
-  };
-
 	render() {
     let { selectedCourse } = this.props;
 
 		return(
 			<div className='sidebar'>
         <JoinDropdown />
+        <Subscribe userId={this.props.userId} parentHandler={this.refresh} />
         {this.state.courses.length === 0
           ? <p>You aren't subscribed to any courses</p>
           : <>

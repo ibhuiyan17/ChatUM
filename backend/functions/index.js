@@ -6,7 +6,7 @@ const fs = require('fs');
 const crypto = require('crypto');
 
 const firebase = require('firebase-admin');
-const { user } = require('firebase-functions/lib/providers/auth');
+
 firebase.initializeApp();
 
 
@@ -273,6 +273,47 @@ app.get('/posts/all-posts/', async (req, res) => {
     });
 
     res.status(200).send(posts);
+});
+
+app.post('/posts/toggle-like', async (req, res) => {
+    const {
+        courseId,
+        postId
+    } = req.body;
+    const { userId } = req.query;
+
+    // check if user exists
+    let userDoc = await getUserDocFromUserId(userId);
+    if (userDoc === null) {
+        res.status(404).send({
+            'error': 'userId not found'
+        });
+        return;
+    }
+    
+    // check if course exists
+    let courseDoc = await getCourseDocFromCourseId(courseId);
+    if (courseDoc === null) {
+        res.status(404).send({
+            'error': 'courseId not found'
+        });
+        return;
+    }
+
+    const postRef = queryRefs.courses.doc(courseId).collection('posts').doc(postId);
+    let { likes } = (await postRef.get()).data();
+    if (likes.includes(userId)) { 
+        // user currently liked post
+        await postRef.update({
+            'likes': firebase.firestore.FieldValue.arrayRemove(userId)
+        });
+    } else {
+        // user does not currently liked post        
+        await postRef.update({
+            'likes': firebase.firestore.FieldValue.arrayUnion(userId)
+        });
+    }
+    res.status(201).send();
 });
 
 app.post('/comments/create-comment/', async(req, res) => {

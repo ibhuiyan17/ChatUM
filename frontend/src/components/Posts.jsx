@@ -58,6 +58,7 @@ class Posts extends Component {
           : <>
               {this.state.postsContent.map( ({ id, author, title, content, likes }) =>
                 <Post key={id}
+                  postId={id} // key isn't passed as a prop
                   author={author}
                   title={title}
                   content={content}

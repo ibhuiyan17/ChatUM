@@ -14,13 +14,14 @@ class Post extends Component {
   }
   
 	render() {
-    let { author, title, content, likes } = this.props;
+    let { postId, author, title, content, likes } = this.props;
     
     return(
 		  <div className="post">
         <p className="title">{title}</p>
         <p className="author">{author}</p>
         <p className="content">{content}</p>
+        <p>postId: {postId}</p>
       </div>
 		)
 	}

@@ -1,0 +1,22 @@
+[
+    {
+        "courseId": "EECS493",
+        "name": "UI"
+    },
+    {
+        "courseId": "EECS485",
+        "name": "Web Systems"
+    },
+    {
+        "courseId": "EECS482",
+        "name": "Operating Systems"
+    },
+    {
+        "courseId": "EECS481",
+        "name": "Software Engineering"
+    },
+    {
+        "courseId": "TC497",
+        "name": "Technical Communications"
+    }
+]

@@ -1,6 +1,7 @@
 const functions = require('firebase-functions');
 const express = require('express');
 var cors = require('cors');
+const fs = require('fs');
 
 const crypto = require('crypto');
 
@@ -8,16 +9,9 @@ const firebase = require('firebase-admin');
 const { user } = require('firebase-functions/lib/providers/auth');
 firebase.initializeApp();
 
+
 const app = express();
 app.use(cors({origin:true,credentials: true}));
-
-// Create and Deploy Your First Cloud Functions
-// https://firebase.google.com/docs/functions/write-firebase-functions
-
-exports.helloWorld = functions.https.onRequest((request, response) => {
-  functions.logger.info("Hello logs!", {structuredData: true});
-  response.sendFile("index.html", {root: __dirname});
-});
 
 /* ******************************************************************************************** */
 /* ---------------------------------------- Query Refs ---------------------------------------- */
@@ -28,7 +22,11 @@ const queryRefs = {
     'users': firebase.firestore().collection('users'),
     'courses': firebase.firestore().collection('courses')
 }
+// initialize firestore
+initFirestore();
 
+// Create and Deploy Your First Cloud Functions
+// https://firebase.google.com/docs/functions/write-firebase-functions
 /* ******************************************************************************************** */
 /* ---------------------------------------- API Routes ---------------------------------------- */
 /* ******************************************************************************************** */
@@ -115,10 +113,9 @@ app.post('/courses/create-course', async (req, res) => {
         return;
     }
     
-    let courseRef = queryRefs.courses.doc(courseId);
-    await courseRef.set({
-        'name': name,
-        'members': [],
+    await addCourseToCollection({
+        courseId,
+        name
     });
     res.status(201).send();
 });
@@ -282,23 +279,47 @@ app.get('/posts/all-posts/', async (req, res) => {
 /* ******************************************************************************************** */
 /* ---------------------------------------- Helper Funcs. ------------------------------------- */
 /* ******************************************************************************************** */
+async function initFirestore() {
+    console.log('initializing firestore...');
+    var initialCourses = JSON.parse(fs.readFileSync('init/courses.json'));
+    
+    await Promise.all(initialCourses.map(async course => {
+        await addCourseToCollection(course);
+    }));
+    
+    console.log('done initializing firestore');
+}
+
 // helper function for validating userId exists within db
-let getUserDocFromUserId = async (userId) => {
+async function getUserDocFromUserId(userId) {
     const doc = await queryRefs.users.doc(userId).get();
     return !doc.exists ?
         null : doc;
-};
+}
 
-let getCourseDocFromCourseId = async (courseId) => {
+async function getCourseDocFromCourseId(courseId) {
     const doc = await queryRefs.courses.doc(courseId).get();
     return !doc.exists ?
         null : doc;    
-};
+}
 
-let getUserDocFromUsername = async (username) => {
+async function getUserDocFromUsername(username) {
     const snapshot = await queryRefs.users.where('username', '==', username).get();
     return snapshot.empty ?
         null : snapshot.docs[0];
+}
+
+async function addCourseToCollection(courseObj) {
+    const {
+        courseId,
+        name
+    } = courseObj;
+
+    let courseRef = queryRefs.courses.doc(courseId);
+    await courseRef.set({
+        'name': name,
+        'members': [],
+    });
 }
 
 

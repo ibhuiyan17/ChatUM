@@ -235,8 +235,8 @@ app.post('/posts/create-post/', async (req, res) => {
     }
 
     let { username } = userDoc.data();
-    let postRef = queryRefs.courses.doc(courseId).collection('posts');
-    await postRef.add({
+    let postsRef = queryRefs.courses.doc(courseId).collection('posts');
+    await postsRef.add({
         'author': username,
         'title': title,
         'content': content,
@@ -273,6 +273,71 @@ app.get('/posts/all-posts/', async (req, res) => {
     });
 
     res.status(200).send(posts);
+});
+
+app.post('/comments/create-comment/', async(req, res) => {
+    const {
+        courseId,
+        postId,
+        content
+    } = req.body;
+    const { userId } = req.query;
+
+    // check if user exists
+    let userDoc = await getUserDocFromUserId(userId);
+    if (userDoc === null) {
+        res.status(404).send({
+            'error': 'userId not found'
+        });
+        return;
+    }
+    
+    // check if course exists
+    let courseDoc = await getCourseDocFromCourseId(courseId);
+    if (courseDoc === null) {
+        res.status(404).send({
+            'error': 'courseId not found'
+        });
+        return;
+    }
+
+    let { username } = userDoc.data();
+    const commentsRef = queryRefs.courses.doc(courseId).collection('posts').doc(postId).collection('comments');
+    await commentsRef.add({ // todo: add likes?
+        'author': username,
+        'content': content,
+        'created': firebase.firestore.Timestamp.now()
+    });
+    res.status(201).send();
+});
+
+app.get('/comments/all-comments', async (req, res) => {
+    const {
+        courseId,
+        postId
+    } = req.query;
+
+    // check if course exists
+    let courseDoc = await getCourseDocFromCourseId(courseId);
+    if (courseDoc === null) {
+        res.status(404).send({
+            'error': 'courseId not found'
+        });
+        return;
+    }
+
+    const commentsRef = queryRefs.courses.doc(courseId).collection('posts').doc(postId).collection('comments');
+    let snapshot = await commentsRef.orderBy('created', 'desc').get(); // latest on top
+
+    let comments = [];
+    snapshot.forEach(commentDoc => {
+        comments.push({
+            id: commentDoc.id,
+            ...commentDoc.data()
+        })
+    });
+
+    res.status(200).send(comments);
 });
 
 

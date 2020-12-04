@@ -13,18 +13,17 @@ class Posts extends Component {
 		this.state = {
       postsContent: []
     };
-    
     this.fetchPosts = this.fetchPosts.bind(this);
   }
-  
+
   componentDidUpdate(prevProps) {
     let { selectedCourse, refreshPostsFlag, postsRefreshComplete } = this.props;
-    
+
     if (selectedCourse !== prevProps.selectedCourse) {
       console.log('fetching posts for', selectedCourse);
       this.fetchPosts(selectedCourse);
     }
-    
+
     // if refresh posts is set true, refresh
     if (refreshPostsFlag) {
       this.fetchPosts(selectedCourse);
@@ -34,7 +33,7 @@ class Posts extends Component {
 
   fetchPosts = async (courseId) => {
     const url = 'http://localhost:5001/webapp-17d6b/us-central1/api/posts/all-posts/'
-    
+
     let {
       data: postsContent
     } = await axios(url, {
@@ -63,11 +62,13 @@ class Posts extends Component {
                   title={title}
                   content={content}
                   likes={likes}
+                  courseId={selectedCourse}
+                  userId={this.props.userId}
                 />
               )}
             </>
         }
-        
+
 			</div>
 		)
 	}

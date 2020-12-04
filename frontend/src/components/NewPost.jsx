@@ -17,7 +17,7 @@ class NewPost extends Component {
       postTitle: '',
       postContent: ''
     };
-    
+
     this.submitPostClicked = this.submitPostClicked.bind(this);
     this.showModal = this.showModal.bind(this);
     this.hideModal = this.hideModal.bind(this);
@@ -59,11 +59,11 @@ class NewPost extends Component {
 
   showModal = () => {
     // e.preventDefault();
-    this.setState({ 
+    this.setState({
       showModal: true
     }, () => console.log('displaying new post modal'));
   };
-  
+
   hideModal = () => {
     this.setState({
       showModal: false,
@@ -71,13 +71,13 @@ class NewPost extends Component {
       postContent: ''
     }, () => console.log('hiding new post modal'));
   };
-  
+
 	render() {
     let { selectedCourse } = this.props;
 
     return(
       <>
-        <Button 
+        <Button
           className="newPostButton"
           onClick={ this.showModal }
         >New Post</Button>

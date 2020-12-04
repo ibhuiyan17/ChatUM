@@ -97,20 +97,22 @@ class LoginPage extends Component {
       <div className="loginPage">
         <div className="login">
           <h1>Log in</h1>
-          <form>
+          <form class=" offset-5 w-25">
             {/* TODO: form stuff, bind to state */}
-            <div>
-              <label>username</label>
+            <div class="form-group row justify-center">
+              <label class= "">Username</label>
               <input
+                class="form-control"
                 type="text"
                 id="loginUsername"
                 name="loginUsername"
                 value={ this.state.loginUsername }
                 onChange={ this.handleChange }>
               </input>
-              <br></br>
-              <label>password</label>
+              <br></br><br></br>
+              <label>Password</label>
               <input
+                class="form-control"
                 type="password"
                 id="loginPassword"
                 name="loginPassword"
@@ -121,22 +123,27 @@ class LoginPage extends Component {
           </form>
           <button class="btn btn-success" onClick={ this.loginButtonClicked }>login</button>
         </div>
+
         <div className="register">
+          <br></br><br></br>
           <h1>Create an Account</h1>
+          <br></br>
           {/* TODO: form stuff, bind to state */}
-          <form>
-            <div>
-              <label >username</label>
+          <form class="offset-5 w-25">
+            <div class="form-group row justify-center">
+              <label >Username</label>
               <input
+                class="form-control"
                 type="text"
                 id="registrationUsername"
                 name="registrationUsername"
                 value={ this.state.registrationUsername }
                 onChange={ this.handleChange }>
               </input>
-              <br></br>
-              <label>password</label>
+              <br></br><br></br>
+              <label>Password</label>
               <input
+                class="form-control"
                 type="password"
                 id="registrationPassword"
                 name="registrationPassword"

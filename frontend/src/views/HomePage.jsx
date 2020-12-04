@@ -16,12 +16,12 @@ class HomePage extends Component {
       selectedCourse: '',
       refreshPostsFlag: false
     };
-    
+
     this.updateSelectedCourse = this.updateSelectedCourse.bind(this);
     this.triggerPostsRefresh = this.triggerPostsRefresh.bind(this);
     this.postsRefreshComplete = this.postsRefreshComplete.bind(this);
   }
-  
+
   updateSelectedCourse(courseId) {
     this.setState({ selectedCourse: courseId }, () => console.log('course updated to', courseId));
   }
@@ -47,8 +47,8 @@ class HomePage extends Component {
           selectedCourse={ selectedCourse }
           updateCourseHandler={ this.updateSelectedCourse }
         />
-        {selectedCourse !== '' 
-          ? <NewPost 
+        {selectedCourse !== ''
+          ? <NewPost
               userId={ userId }
               selectedCourse={ selectedCourse }
               triggerPostsRefresh={ this.triggerPostsRefresh }
@@ -58,7 +58,8 @@ class HomePage extends Component {
         <Posts
           selectedCourse={ selectedCourse }
           refreshPostsFlag={ refreshPostsFlag }
-          postsRefreshComplete={ this.postsRefreshComplete } 
+          postsRefreshComplete={ this.postsRefreshComplete }
+          userId={ userId }
         />
 			</>
 		)

@@ -23,7 +23,12 @@ const queryRefs = {
     'courses': firebase.firestore().collection('courses')
 }
 // initialize firestore
-initFirestore();
+// initFirestore();
+app.get('/init-firestore', async (req, res) => {
+    console.log('initializing');
+    await initFirestore();
+    res.status(201).send();
+});
 
 // Create and Deploy Your First Cloud Functions
 // https://firebase.google.com/docs/functions/write-firebase-functions
@@ -36,6 +41,7 @@ initFirestore();
 app.post('/accounts/create-user', async (req, res) => {
     const {
         username,
+        email,
         password
     } = req.body;
 
@@ -56,6 +62,7 @@ app.post('/accounts/create-user', async (req, res) => {
     await queryRefs.users.doc(newUserId).set({
         'username': username,
         'password': hashedPassword,
+        'email': email,
         'courses': []
     });
     res.status(201).send();   
@@ -160,10 +167,16 @@ app.post('/courses/subscribe-course', async (req, res) => {
         return;
     }
 
-    const subscribedCoursesRef = queryRefs.users.doc(userId).collection('courses');
-    await subscribedCoursesRef.doc(courseId).set({
-        'name': courseDoc.data().name 
+    // const subscribedCoursesRef = queryRefs.users.doc(userId).collection('courses');
+    const usersRef = queryRefs.users.doc(userId);
+    await usersRef.update({
+        'courses': firebase.firestore.FieldValue.arrayUnion(courseId)
     });
+    const courseRef = queryRefs.courses.doc(courseId);
+    await courseRef.update({
+        'members': firebase.firestore.FieldValue.arrayUnion(userId)
+    });
+
     console.log('course', courseId, 'added for user', userId);
     res.status(201).send();
 
@@ -186,19 +199,46 @@ app.get('/courses/subscribed-courses', async (req, res) => {
         return;
     }
 
-    const subscribedCoursesRef = queryRefs.users.doc(userId).collection('courses');
-    const snapshot = await subscribedCoursesRef.get()
-
+    let { courses: courseIds } = userDoc.data();
     let courses = [];
-    snapshot.forEach(courseDoc => {
+    await Promise.all(courseIds.map(async courseId => {
+        let courseDoc = await queryRefs.courses.doc(courseId).get()
         courses.push({
             id: courseDoc.id,
             ...courseDoc.data()
-        })
-    });
+        });
+    }));
 
     res.status(200).send(courses);
     
+});
+
+app.get('/courses/all-members', async (req, res) => {
+    console.log('all members')
+    let { courseId } = req.query;
+
+    // check if course exists
+    let courseDoc = await getCourseDocFromCourseId(courseId);
+    if (courseDoc === null) {
+        res.status(404).send({
+            'error': 'courseId not found'
+        });
+        return;
+    }
+
+    let { members: userIds } = courseDoc.data();
+    let members = [];
+    await Promise.all(userIds.map(async userId => {
+        console.log('userId', userId);
+        let userDoc = await queryRefs.users.doc(userId).get();
+        let { username, email } = userDoc.data()
+        members.push({
+            'username': username,
+            'email': email
+        });
+    }));
+
+    res.status(200).send(members);
 });
 
 

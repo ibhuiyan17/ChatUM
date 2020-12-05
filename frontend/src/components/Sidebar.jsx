@@ -3,6 +3,8 @@ import Nav from 'react-bootstrap/Nav';
 import JoinDropdown from './JoinDropdown';
 import Subscribe from './Subscribe';
 
+import Button from 'react-bootstrap/Button';
+
 import axios from 'axios';
 
 class Sidebar extends Component {
@@ -50,6 +52,8 @@ class Sidebar extends Component {
 
 		return(
 			<div className='sidebar'>
+        <Button onClick={ e => this.handleClick('') }>Explore Courses</Button>
+        <hr/>
         <JoinDropdown />
         <Subscribe userId={this.props.userId} parentHandler={this.refresh} />
         {this.state.courses.length === 0

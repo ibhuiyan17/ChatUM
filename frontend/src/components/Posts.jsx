@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 
 import Post from './Post'
+import Explore from './Explore'
 
 import axios from 'axios';
 
@@ -52,23 +53,29 @@ class Posts extends Component {
     // TODO: filter based on selected tab
 		return(
 			<div className="postsContainer">
-        {this.state.postsContent.length === 0 && selectedCourse !== ''
-          ? <h2>No posts yet for { selectedCourse }. Create one?</h2>
-          : <>
-              {this.state.postsContent.map( ({ id, author, title, content, likes }) =>
-                <Post key={id}
-                  postId={id} // key isn't passed as a prop
-                  author={author}
-                  title={title}
-                  content={content}
-                  likes={likes}
-                  courseId={selectedCourse}
-                  userId={this.props.userId}
-                />
-              )}
-            </>
+        {
+        this.state.postsContent.length === 0 && selectedCourse !== '' &&
+        <h2>No posts yet for { selectedCourse }. Create one?</h2>
         }
-
+        {this.state.postsContent.length !== 0 && selectedCourse !== '' && 
+        <>
+        {this.state.postsContent.map( ({ id, author, title, content, likes }) =>
+          <Post key={id}
+            postId={id} // key isn't passed as a prop
+            author={author}
+            title={title}
+            content={content}
+            likes={likes}
+            courseId={selectedCourse}
+            userId={this.props.userId}
+          />
+        )}
+      </>
+        }
+        
+        {selectedCourse === '' &&
+          <Explore userId={this.props.userId}/>
+        }
 			</div>
 		)
 	}

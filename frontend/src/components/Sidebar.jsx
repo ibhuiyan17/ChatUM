@@ -70,6 +70,9 @@ class Sidebar extends Component {
               </Nav>
             </>
         }
+        <div style={{marginLeft: "75px", position:"fixed", bottom: "10px"}}>
+        <Button onClick={()=>{window.location.reload()}}>Sign Out</Button>
+        </div>
 			</div>
 		)
 	}

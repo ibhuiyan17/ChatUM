@@ -15,6 +15,11 @@ class Posts extends Component {
       postsContent: []
     };
     this.fetchPosts = this.fetchPosts.bind(this);
+    this.handleChange = this.handleChange.bind(this);
+  }
+
+  handleChange(selectedCourse){
+    this.fetchPosts(selectedCourse)
   }
 
   componentDidUpdate(prevProps) {
@@ -57,7 +62,7 @@ class Posts extends Component {
         this.state.postsContent.length === 0 && selectedCourse !== '' &&
         <h2>No posts yet for { selectedCourse }. Create one?</h2>
         }
-        {this.state.postsContent.length !== 0 && selectedCourse !== '' && 
+        {this.state.postsContent.length !== 0 && selectedCourse !== '' &&
         <>
         {this.state.postsContent.map( ({ id, author, title, content, likes }) =>
           <Post key={id}
@@ -68,11 +73,12 @@ class Posts extends Component {
             likes={likes}
             courseId={selectedCourse}
             userId={this.props.userId}
+            handler={this.handleChange}
           />
         )}
       </>
         }
-        
+
         {selectedCourse === '' &&
           <Explore userId={this.props.userId}/>
         }

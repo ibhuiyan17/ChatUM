@@ -81,6 +81,20 @@
   background-color: rgb(235, 239, 242);
 }
 
+.sidebar-right {
+  height: 100%; /* Full-height: remove this if you want "auto" height */
+  width: 250px; /* Set the width of the sidebar */
+  position: fixed; /* Fixed Sidebar (stay in place on scroll) */
+  z-index: 1; /* Stay on top */
+  top: 150; /* Stay at the top */
+  right: 0;
+  background-color: white;
+  overflow-x: hidden; /* Disable horizontal scroll */
+  padding-top: 20px;
+  border-style: solid;
+  border-radius: 10px;
+  background-color: rgb(235, 239, 242);
+}
 /* CSS code adapted from https://www.w3schools.com/css/tryit.asp?filename=trycss3_flexbox_flex-wrap_wrap*/
 .flex-container {
   display: flex;
@@ -91,6 +105,7 @@
 .postsContainer {
   margin-left: 260px;
   margin-top: 75px;
+  margin-right: 260px
 }
 
 .post {
@@ -120,8 +135,8 @@
 
 .newPostButton {
   float: right;
-  margin-top: 10px;
-  margin-right: 10px;
+  margin-top: 20px;
+  margin-right: 270px;
 }
 
 .scrollable {

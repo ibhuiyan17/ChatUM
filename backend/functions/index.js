@@ -50,14 +50,14 @@ app.post('/accounts/create-user', async (req, res) => {
         res.status(403).send({
             'error': 'username already exists in db'
         });
-        return;    
+        return;
     }
     console.log('username not already in db, creating user');
 
     // TODO: this needs to be guaranteed different
-    const newUserId = crypto.randomBytes(20).toString('hex'); // userId is calculated once 
+    const newUserId = crypto.randomBytes(20).toString('hex'); // userId is calculated once
     // TODO: hash this somehow
-    const hashedPassword = password; 
+    const hashedPassword = password;
 
     await queryRefs.users.doc(newUserId).set({
         'username': username,
@@ -65,7 +65,7 @@ app.post('/accounts/create-user', async (req, res) => {
         'email': email,
         'courses': []
     });
-    res.status(201).send();   
+    res.status(201).send();
 });
 
 /* Login user by passing back userId */
@@ -74,7 +74,7 @@ app.get('/accounts/login', async (req, res) => {
         username,
         password
     } = req.query;
-    
+
     // TODO: change this later
     const hashedPassword = password;
     let storedDoc = await getUserDocFromUsername(username);
@@ -82,7 +82,7 @@ app.get('/accounts/login', async (req, res) => {
         res.status(404).send({
             'error': 'username not found'
         });
-        return;    
+        return;
     }
     console.log('hi')
 
@@ -119,7 +119,7 @@ app.post('/courses/create-course', async (req, res) => {
         });
         return;
     }
-    
+
     await addCourseToCollection({
         courseId,
         name
@@ -134,12 +134,12 @@ app.get('/courses/all-courses', async (req, res) => {
     let courses = [];
     snapshot.forEach(courseDoc => {
         courses.push({
-            id: courseDoc.id, 
+            id: courseDoc.id,
             ...courseDoc.data()
         });
     });
-    
-    res.status(200).send(courses);    
+
+    res.status(200).send(courses);
 });
 
 /* User subscribe to course '/courses/subscribe-course?courseId={courseId}' */
@@ -157,7 +157,7 @@ app.post('/courses/subscribe-course', async (req, res) => {
         });
         return;
     }
-    
+
     // check if course exists
     let courseDoc = await getCourseDocFromCourseId(courseId);
     if (courseDoc === null) {
@@ -210,7 +210,35 @@ app.get('/courses/subscribed-courses', async (req, res) => {
     }));
 
     res.status(200).send(courses);
-    
+
+});
+
+app.get('/courses/all-members', async (req, res) => {
+    console.log('all members')
+    let { courseId } = req.query;
+
+    // check if course exists
+    let courseDoc = await getCourseDocFromCourseId(courseId);
+    if (courseDoc === null) {
+        res.status(404).send({
+            'error': 'courseId not found'
+        });
+        return;
+    }
+
+    let { members: userIds } = courseDoc.data();
+    let members = [];
+    await Promise.all(userIds.map(async userId => {
+        console.log('userId', userId);
+        let userDoc = await queryRefs.users.doc(userId).get();
+        let { username, email } = userDoc.data()
+        members.push({
+            'username': username,
+            'email': email
+        });
+    }));
+
+    res.status(200).send(members);
 });
 
 app.get('/courses/all-members', async (req, res) => {
@@ -264,7 +292,7 @@ app.post('/posts/create-post/', async (req, res) => {
         });
         return;
     }
-    
+
     // check if course exists
     let courseDoc = await getCourseDocFromCourseId(courseId);
     if (courseDoc === null) {
@@ -300,10 +328,10 @@ app.get('/posts/all-posts/', async (req, res) => {
         });
         return;
     }
-    
+
     let postsRef = queryRefs.courses.doc(courseId).collection('posts');
     let snapshot = await postsRef.orderBy('created', 'desc').get(); // latest on top
-    
+
     let posts = [];
     snapshot.forEach(postDoc => {
         posts.push({
@@ -330,7 +358,7 @@ app.post('/posts/toggle-like', async (req, res) => {
         });
         return;
     }
-    
+
     // check if course exists
     let courseDoc = await getCourseDocFromCourseId(courseId);
     if (courseDoc === null) {
@@ -342,13 +370,13 @@ app.post('/posts/toggle-like', async (req, res) => {
 
     const postRef = queryRefs.courses.doc(courseId).collection('posts').doc(postId);
     let { likes } = (await postRef.get()).data();
-    if (likes.includes(userId)) { 
+    if (likes.includes(userId)) {
         // user currently liked post
         await postRef.update({
             'likes': firebase.firestore.FieldValue.arrayRemove(userId)
         });
     } else {
-        // user does not currently liked post        
+        // user does not currently liked post
         await postRef.update({
             'likes': firebase.firestore.FieldValue.arrayUnion(userId)
         });
@@ -372,7 +400,7 @@ app.post('/comments/create-comment/', async(req, res) => {
         });
         return;
     }
-    
+
     // check if course exists
     let courseDoc = await getCourseDocFromCourseId(courseId);
     if (courseDoc === null) {
@@ -428,11 +456,11 @@ app.get('/comments/all-comments', async (req, res) => {
 async function initFirestore() {
     console.log('initializing firestore...');
     var initialCourses = JSON.parse(fs.readFileSync('init/courses.json'));
-    
+
     await Promise.all(initialCourses.map(async course => {
         await addCourseToCollection(course);
     }));
-    
+
     console.log('done initializing firestore');
 }
 
@@ -446,7 +474,7 @@ async function getUserDocFromUserId(userId) {
 async function getCourseDocFromCourseId(courseId) {
     const doc = await queryRefs.courses.doc(courseId).get();
     return !doc.exists ?
-        null : doc;    
+        null : doc;
 }
 
 async function getUserDocFromUsername(username) {

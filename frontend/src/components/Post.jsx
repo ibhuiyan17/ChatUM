@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 
 import Comments from './Comments'
+import Likes from './Likes'
 import axios from 'axios';
 
 
@@ -22,6 +23,8 @@ class Post extends Component {
         <p className="content">{content}</p>
         <p className="author"><small>posted by: {author}</small></p>
         <Comments postId={postId} courseId={courseId} userId={userId}/>
+        <Likes likes={likes} userId={userId} courseId={courseId} postId={postId}
+        handler={this.props.handler}/>
       </div>
 		)
 	}

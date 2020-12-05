@@ -11,7 +11,8 @@ class LoginPage extends Component {
       loginUsername: '',
       loginPassword: '',
       registrationUsername: '',
-      registrationPassword: ''
+      registrationPassword: '',
+      registrationEmail: ''
     };
 
     this.registerButtonClicked = this.registerButtonClicked.bind(this);
@@ -33,13 +34,16 @@ class LoginPage extends Component {
 
     let {
       registrationUsername: username,
-      registrationPassword: password
+      registrationPassword: password,
+      registrationEmail: email
     } = this.state;
 
+    console.log('email:', email);
     try {
       await axios.post(url, {
         'username': username,
-        'password': password
+        'password': password,
+        'email' : email
       });
       console.log('successfully created user');
 
@@ -89,6 +93,9 @@ class LoginPage extends Component {
     }
     else if (id === 'registrationPassword') {
       this.setState({ registrationPassword: event.target.value });
+    }
+    else if (id === 'registrationEmail') {
+      this.setState({ registrationEmail: event.target.value });
     }
   }
 
@@ -148,6 +155,16 @@ class LoginPage extends Component {
                 id="registrationPassword"
                 name="registrationPassword"
                 value={ this.state.registrationPassword }
+                onChange={ this.handleChange }>
+              </input>
+              <br></br><br></br>
+              <label>Email</label>
+              <input
+                class="form-control"
+                type="text"
+                id="registrationEmail"
+                name="registrationEmail"
+                value={ this.state.registrationEmail }
                 onChange={ this.handleChange }>
               </input>
             </div>

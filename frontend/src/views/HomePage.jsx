@@ -7,6 +7,7 @@ import Button from 'react-bootstrap/Button'
 import Sidebar from '../components/Sidebar';
 import Posts from '../components/Posts';
 import NewPost from '../components/NewPost';
+import Classmates from '../components/Classmates';
 
 class HomePage extends Component {
 	constructor(props) {
@@ -48,6 +49,10 @@ class HomePage extends Component {
           updateCourseHandler={ this.updateSelectedCourse }
         />
         {selectedCourse !== ''
+          ? <Classmates courseId={selectedCourse} />
+          : null
+        }
+        {selectedCourse !== ''
           ? <NewPost
               userId={ userId }
               selectedCourse={ selectedCourse }
@@ -61,6 +66,7 @@ class HomePage extends Component {
           postsRefreshComplete={ this.postsRefreshComplete }
           userId={ userId }
         />
+
 			</>
 		)
 	}

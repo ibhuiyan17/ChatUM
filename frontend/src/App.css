@@ -68,7 +68,7 @@
 /* https://www.w3schools.com/howto/howto_css_fixed_sidebar.asp */
 .sidebar {
   height: 100%; /* Full-height: remove this if you want "auto" height */
-  width: 160px; /* Set the width of the sidebar */
+  width: 250px; /* Set the width of the sidebar */
   position: fixed; /* Fixed Sidebar (stay in place on scroll) */
   z-index: 1; /* Stay on top */
   top: 150; /* Stay at the top */
@@ -76,6 +76,9 @@
   background-color: white;
   overflow-x: hidden; /* Disable horizontal scroll */
   padding-top: 20px;
+  border-style: solid;
+  border-radius: 10px;
+  background-color: rgb(235, 239, 242);
 }
 
 /* CSS code adapted from https://www.w3schools.com/css/tryit.asp?filename=trycss3_flexbox_flex-wrap_wrap*/
@@ -86,7 +89,7 @@
 }
 
 .postsContainer {
-  margin-left: 170px;
+  margin-left: 260px;
   margin-top: 75px;
 }
 
@@ -96,6 +99,9 @@
   padding: 20px;
   margin: 10px;
   font-size: large;
+  background-color:  rgb(235, 239, 242);
+  /* for pink rgb(240, 222, 240) */
+  border-radius: 25px;
 }
 
 

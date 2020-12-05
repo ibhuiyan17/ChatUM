@@ -33,7 +33,7 @@ class App extends Component {
       <div className="App">
         <div className="header">
           <h1>ChatUM</h1>
-          <h2>Meet your peers</h2>
+          <h2><i>Meet your peers</i></h2>
         </div>
         {this.state.userId === '' ? <LoginPage userIdHandler={ this.userIdHandler }/> : <HomePage userId={ this.state.userId }/>}
       </div>

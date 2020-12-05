@@ -18,9 +18,9 @@ class Post extends Component {
 
     return(
 		  <div className="post">
-        <h3 className="title">Title: {title}</h3>
-        <p className="author">Author: {author}</p>
+        <h3 className="title">{title}</h3>
         <p className="content">{content}</p>
+        <p className="author"><small>posted by: {author}</small></p>
         <Comments postId={postId} courseId={courseId} userId={userId}/>
       </div>
 		)

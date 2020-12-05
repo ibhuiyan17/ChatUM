@@ -9,11 +9,13 @@ class Comments extends Component {
 	constructor(props) {
     super(props)
 		this.state = {
-            comments: false
+            comments: false,
+            showComments: false
         };
 
         this.fetchComments = this.fetchComments.bind(this);
         this.handleChange = this.handleChange.bind(this);
+        this.toggleShowComments = this.toggleShowComments.bind(this);
   }
 
   async componentDidMount() {
@@ -38,6 +40,10 @@ class Comments extends Component {
     this.setState({ comments });
   };
 
+  toggleShowComments(){
+    console.log("toggled")
+    this.setState({showComments: !this.state.showComments})
+  }
 
 	render() {
     let { selectedCourse } = this.props;
@@ -45,21 +51,27 @@ class Comments extends Component {
     if (this.state.comments) {
       items = this.state.comments.map((comment, i) => (
           <li key={i.toString()}>
+            <small>
             <hr/>
-            <div><strong>{comment.author}:</strong> {comment.content}</div>
+            <div><strong><i>{comment.author}:</i></strong> {comment.content}</div>
+            </small>
           </li>
         ))
         items.reverse()
   }
-
+  var text = this.state.showComments ? "Hide Comments" : "Show " +this.state.comments.length+" Comments"
     // TODO: filter based on selected tab
 		return(
 			<div className="CommentsContainer">
         {this.state.comments.length === 0
           ? <p><small>No Comments yet. Create one?</small></p>
           : <>
-            <ul class="comment">{items}</ul>
+            <p onClick={this.toggleShowComments}><small>{text}</small></p>
             </>
+        }
+        {this.state.comments.length != 0 && this.state.showComments
+        ? <ul class="comment">{items}</ul>
+        : <></>
         }
         <div><NewComment handler={this.handleChange} courseId={this.props.courseId} userId={this.props.userId} postId={this.props.postId}/></div>
 			</div>

@@ -55,12 +55,13 @@ class Sidebar extends Component {
         {this.state.courses.length === 0
           ? <p>You aren't subscribed to any courses</p>
           : <>
-              <p><b>current: </b>{ selectedCourse === '' ? 'None' : selectedCourse }</p>
               <Nav defaultActiveKey="/home" className="flex-column">
                 {this.state.courses.map(course =>
                   <Nav.Link key={ course.id }
                     onClick={ e => this.handleClick(course.id) }
-                  >{course.name}</Nav.Link>
+                >{course.id == selectedCourse && <strong>{course.name}</strong>}
+                 {course.id !== selectedCourse && course.name}
+                </Nav.Link>
                 )}
               </Nav>
             </>

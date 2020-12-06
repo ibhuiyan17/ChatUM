@@ -15,6 +15,8 @@ class App extends Component {
   constructor(props) {
     super(props);
 
+    console.log('running w/ base url:', process.env.REACT_APP_BASE_URL);
+
     this.state = {
       // userId: '6194c2603badb6159599660efa2686a48d122807' // TODO: change this to ''
       userId: ''

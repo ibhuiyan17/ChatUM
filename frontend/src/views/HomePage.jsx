@@ -18,7 +18,6 @@ class HomePage extends Component {
       refreshPostsFlag: false
     };
 
-    console.log('running w/ base url:', process.env.REACT_APP_BASE_URL);
 
     this.updateSelectedCourse = this.updateSelectedCourse.bind(this);
     this.triggerPostsRefresh = this.triggerPostsRefresh.bind(this);

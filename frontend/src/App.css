@@ -46,17 +46,17 @@
   width: 100%;
   border-color: #BBBBBB;
   border-style: solid;
-  background:#2C4762;
+  background:#00274C;
   border-width: 3px;
 }
 
 .header > h1 {
-  color: #DAF1FC;
+  color: #FFCB05;
   text-align: center;
 }
 
 .header > h2 {
-  color: #DAF1FC;
+  color: #FFCB05;
   text-align: center;
 }
 
@@ -76,7 +76,6 @@
   background-color: white;
   overflow-x: hidden; /* Disable horizontal scroll */
   padding-top: 20px;
-  border-style: solid;
   border-radius: 10px;
   background-color: rgb(235, 239, 242);
 }
@@ -91,7 +90,6 @@
   background-color: white;
   overflow-x: hidden; /* Disable horizontal scroll */
   padding-top: 20px;
-  border-style: solid;
   border-radius: 10px;
   background-color: rgb(235, 239, 242);
 }
@@ -110,28 +108,17 @@
 
 .post {
   flex-basis: 100%;
-  border: thick solid #000000;
   padding: 20px;
   margin: 10px;
+  margin-bottom: 30px;
   font-size: large;
+  text-align: left;
   background-color:  rgb(235, 239, 242);
   /* for pink rgb(240, 222, 240) */
   border-radius: 25px;
 }
 
 
-/* TODO */
-.post .title {
-
-}
-
-.post .author {
-
-}
-
-.post .content {
-
-}
 
 .newPostButton {
   float: right;
@@ -146,6 +133,19 @@
 
 .comment {
   list-style: none;
+}
+
+div.form
+{
+    display: block;
+    text-align: center;
+}
+form
+{
+    display: inline-block;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: left;
 }
 
 

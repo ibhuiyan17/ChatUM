@@ -104,7 +104,7 @@ class LoginPage extends Component {
       <div className="loginPage">
         <div className="login">
           <h1>Log in</h1>
-          <form class=" offset-5 w-25">
+          <form class="w-25">
             {/* TODO: form stuff, bind to state */}
             <div class="form-group row justify-center">
               <label class= "">Username</label>
@@ -128,15 +128,15 @@ class LoginPage extends Component {
               </input>
             </div>
           </form>
-          <button class="btn btn-success" onClick={ this.loginButtonClicked }>login</button>
         </div>
+        <button class="btn btn-success" onClick={ this.loginButtonClicked }>login</button>
 
         <div className="register">
           <br></br><br></br>
           <h1>Create an Account</h1>
           <br></br>
           {/* TODO: form stuff, bind to state */}
-          <form class="offset-5 w-25">
+          <form class="w-25">
             <div class="form-group row justify-center">
               <label >Username</label>
               <input
@@ -169,8 +169,8 @@ class LoginPage extends Component {
               </input>
             </div>
           </form>
-          <button class="btn btn-primary" onClick={ this.registerButtonClicked }>create account</button>
         </div>
+        <button class="btn btn-primary" onClick={ this.registerButtonClicked }>create account</button>
 
 
 

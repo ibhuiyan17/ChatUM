@@ -72,15 +72,16 @@ class Explore extends Component {
     }
 
 	render() {
-
+    
     var items = null
     if (this.state.posts) {
+      
         items = this.state.posts.map((post, i) => (
           <div className="post" key={i}>
-            <p className="classid">{post.courseId}</p>
-            <h3 className="title">{post.title}</h3>
-            <p className="content">{post.content}</p>
+            <p className="classid">From: {post.courseId}</p>
+            <h1 className="title">{post.title}</h1>
             <p className="author"><small>posted by: {post.author}</small></p>
+            <p className="content">{post.content}</p>
             <p>{post.likes.length} {post.likes.length === 1 ? "Like" : "Likes"}</p>
           </div>
         ))
@@ -88,6 +89,7 @@ class Explore extends Component {
     console.log(items)
     return(
         <div>
+          <h1>Popular Posts From All Classes</h1>
             <div>
                   {
                       this.state.posts && items ?

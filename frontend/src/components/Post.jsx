@@ -19,12 +19,15 @@ class Post extends Component {
 
     return(
 		  <div className="post">
-        <h3 className="title">{title}</h3>
+        <h1 className="title">{title}</h1>
+        <p className="author"><small>Posted by: {author}</small></p>
         <p className="content">{content}</p>
-        <p className="author"><small>posted by: {author}</small></p>
-        <Comments postId={postId} courseId={courseId} userId={userId}/>
+        <br></br>
         <Likes likes={likes} userId={userId} courseId={courseId} postId={postId}
         handler={this.props.handler}/>
+        <hr></hr>
+        <Comments postId={postId} courseId={courseId} userId={userId}/>
+        
       </div>
 		)
 	}

@@ -52,7 +52,7 @@ class Sidebar extends Component {
 
 		return(
 			<div className='sidebar'>
-        <Button onClick={ e => this.handleClick('') }>Explore Courses</Button>
+        <Button onClick={ e => this.handleClick('') }>Popular Posts</Button>
         <hr/>
         <JoinDropdown />
         <Subscribe userId={this.props.userId} parentHandler={this.refresh} />

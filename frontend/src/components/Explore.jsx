@@ -76,20 +76,21 @@ class Explore extends Component {
     var items = null
     if (this.state.posts) {
       
-        items = this.state.posts.map((post, i) => (
-          <div className="post" key={i}>
-            <p className="classid">From: {post.courseId}</p>
-            <h1 className="title">{post.title}</h1>
-            <p className="author"><small>posted by: {post.author}</small></p>
-            <p className="content">{post.content}</p>
-            <p>{post.likes.length} {post.likes.length === 1 ? "Like" : "Likes"}</p>
-          </div>
-        ))
-    }
-    console.log(items)
+      items = this.state.posts.map((post, i) => (post.likes.length >= 10) ?
+        (<div className="post_gold" key={i}>
+          <p className="classid">From: {post.courseId}</p>
+          <h1 className="title">{post.title}</h1>
+          <p className="author"><small>posted by: {post.author}</small></p>
+          <p className="content">{post.content}</p>
+          <p>{post.likes.length} {post.likes.length === 1 ? "Like" : "Likes"}</p>
+        </div>
+      ):(<p></p>));
+  }
+  console.log(items)
     return(
         <div>
-          <h1>See What Other Classes Are Up To!</h1>
+          <h1>See Popular Posts From All Over The School!</h1>
+          <p> All posts with 10 or more likes are featured here!</p>
             <div>
                   {
                       this.state.posts && items ?

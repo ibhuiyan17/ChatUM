@@ -15,7 +15,7 @@ class newComment extends Component {
 
   // Create post in current class
   submitCommentClicked = async () => {
-    let url = 'http://localhost:5001/webapp-17d6b/us-central1/api/comments/create-comment/'
+    let url = process.env.REACT_APP_BASE_URL + '/api/comments/create-comment/'
 
     let { postId, courseId, userId } = this.props;
 

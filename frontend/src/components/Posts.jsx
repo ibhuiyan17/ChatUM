@@ -38,7 +38,7 @@ class Posts extends Component {
   }
 
   fetchPosts = async (courseId) => {
-    const url = 'http://localhost:5001/webapp-17d6b/us-central1/api/posts/all-posts/'
+    const url = process.env.REACT_APP_BASE_URL + '/api/posts/all-posts/'
 
     let {
       data: postsContent

@@ -27,7 +27,7 @@ class Comments extends Component {
   }
 
   fetchComments = async (courseId, postId) => {
-    const url = 'http://localhost:5001/webapp-17d6b/us-central1/api/comments/all-comments/'
+    const url = process.env.REACT_APP_BASE_URL + '/api/comments/all-comments/'
 
     let {
       data: comments

@@ -27,7 +27,7 @@ class NewPost extends Component {
   submitPostClicked = async () => {
     console.log('submitting post');
 
-    let url = 'http://localhost:5001/webapp-17d6b/us-central1/api/posts/create-post/'
+    let url = process.env.REACT_APP_BASE_URL + '/api/posts/create-post/'
     let { postTitle, postContent } = this.state;
     let { userId, selectedCourse, triggerPostsRefresh } = this.props;
 

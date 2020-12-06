@@ -15,7 +15,7 @@ class Classmates extends Component {
   }
 
   async refresh() {
-    const url = 'http://localhost:5001/webapp-17d6b/us-central1/api/courses/all-members/'
+    const url = process.env.REACT_APP_BASE_URL + '/api/courses/all-members/'
 
     const {
       data: members
@@ -41,20 +41,6 @@ class Classmates extends Component {
     }
   }
 
-  // componentDidUpdate(prevProps) {
-  //   let { selectedCourse, refreshPostsFlag, postsRefreshComplete } = this.props;
-
-  //   if (selectedCourse !== prevProps.selectedCourse) {
-  //     console.log('fetching posts for', selectedCourse);
-  //     this.fetchPosts(selectedCourse);
-  //   }
-
-  //   // if refresh posts is set true, refresh
-  //   if (refreshPostsFlag) {
-  //     this.fetchPosts(selectedCourse);
-  //     postsRefreshComplete();
-  //   }
-  // }
 
 	render() {
     let { courseId } = this.props;

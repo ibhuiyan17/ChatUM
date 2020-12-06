@@ -22,7 +22,7 @@ class Subscribe extends Component {
     }
 
     async componentDidMount(){
-        const url = "http://localhost:5001/webapp-17d6b/us-central1/api/courses/all-courses"
+        const url = process.env.REACT_APP_BASE_URL + "/api/courses/all-courses"
 
         const {
             data: courses
@@ -37,7 +37,7 @@ class Subscribe extends Component {
   submitSubscribeClicked = async (courseid) => {
     console.log('submitting post');
 
-    let url = 'http://localhost:5001/webapp-17d6b/us-central1/api/courses/subscribe-course'
+    let url = process.env.REACT_APP_BASE_URL + '/api/courses/subscribe-course'
     let { userId } = this.props;
 
     try {

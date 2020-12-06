@@ -30,7 +30,7 @@ class LoginPage extends Component {
   // registration handler
   registerButtonClicked = async () => {
     console.log('register button clicked');
-    let url = 'http://localhost:5001/webapp-17d6b/us-central1/api/accounts/create-user';
+    let url = process.env.REACT_APP_BASE_URL + '/api/accounts/create-user';
 
     let {
       registrationUsername: username,
@@ -57,7 +57,7 @@ class LoginPage extends Component {
 
   // logs in user and sets userId for the app
   loginAndSetUserId = async (username, password) => {
-    let url = 'http://localhost:5001/webapp-17d6b/us-central1/api/accounts/login';
+    let url = process.env.REACT_APP_BASE_URL + '/api/accounts/login';
     try {
       const {
         data: {

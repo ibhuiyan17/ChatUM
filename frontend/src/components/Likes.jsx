@@ -20,7 +20,7 @@ class Likes extends Component {
 
 
   toggleLikes = async () => {
-    const url = 'http://localhost:5001/webapp-17d6b/us-central1/api/posts/toggle-like/'
+    const url = process.env.REACT_APP_BASE_URL + '/api/posts/toggle-like/'
 
     await axios.post(url, {
         'courseId': this.props.courseId,

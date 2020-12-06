@@ -4,7 +4,7 @@ function Button() {
 
   let buttonClicked = async () => {
     console.log('button clicked');
-    let url = 'http://localhost:5001/webapp-17d6b/us-central1/api/accounts/create-user';
+    let url = process.env.REACT_APP_BASE_URL + '/api/accounts/create-user';
     
     try {
       await axios.post(url, {

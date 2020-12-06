@@ -19,7 +19,7 @@ class Explore extends Component {
   }
 
     async getPosts(courseId){
-      const url = 'http://localhost:5001/webapp-17d6b/us-central1/api/posts/all-posts/'
+      const url = process.env.REACT_APP_BASE_URL + '/api/posts/all-posts/'
 
       let {
         data: postsContent
@@ -32,7 +32,7 @@ class Explore extends Component {
     }
 
     async componentDidMount(){
-        let url = "http://localhost:5001/webapp-17d6b/us-central1/api/courses/all-courses"
+        let url = process.env.REACT_APP_BASE_URL + "/api/courses/all-courses"
 
         const {
             data: courses
@@ -45,7 +45,7 @@ class Explore extends Component {
 
           var posts = await Promise.all(this.state.courses.map( async (course) => {
             console.log(course)
-            url = 'http://localhost:5001/webapp-17d6b/us-central1/api/posts/all-posts/'
+            url = process.env.REACT_APP_BASE_URL + '/api/posts/all-posts/'
 
             let {
               data: postsContent

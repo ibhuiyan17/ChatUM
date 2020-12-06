@@ -33,7 +33,7 @@ class Sidebar extends Component {
   };
 
   async refresh() {
-    const url = 'http://localhost:5001/webapp-17d6b/us-central1/api/courses/subscribed-courses/'
+    const url = process.env.REACT_APP_BASE_URL + '/api/courses/subscribed-courses/'
 
     const {
       data: courses

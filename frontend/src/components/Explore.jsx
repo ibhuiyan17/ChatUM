@@ -89,7 +89,7 @@ class Explore extends Component {
     console.log(items)
     return(
         <div>
-          <h1>Popular Posts From All Classes</h1>
+          <h1>See What Other Classes Are Up To!</h1>
             <div>
                   {
                       this.state.posts && items ?
